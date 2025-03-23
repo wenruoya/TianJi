@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.wr.tianji.mapper.UserMapper">
+
+    <select id="pageQuery" resultType="org.wr.tianji.pojo.entity.User">
+        select * from tianji.user
+        <where>
+            <if test="name != null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="userNumber != null and userNumber!=''">
+                and usernumber = #{userNumber}
+            </if>
+                and role !=0
+        </where>
+        order by create_time desc
+    </select>
+
+    <update id="reset">
+        update tianji.user
+        set password = #{password}
+        where user_id = #{id}
+    </update>
+
+    <update id="changeId">
+        UPDATE tianji.report
+        SET
+            dev_user_id = CASE
+                        WHEN dev_user_id = #{id} THEN 1
+                        ELSE dev_user_id
+                END,
+            sec_user_id = CASE
+                        WHEN sec_user_id = #{id} THEN 1
+                        ELSE sec_user_id
+                END
+        WHERE
+            dev_user_id = #{id} OR sec_user_id = #{id}
+    </update>
+
+</mapper>

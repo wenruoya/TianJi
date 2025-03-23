@@ -1,0 +1,24 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.wr.tianji.mapper.TrendMapper">
+
+    <select id="getSumByStatus" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM tianji.report WHERE status=#{status};
+    </select>
+
+    <select id="getCountRiskId" resultType="org.wr.tianji.pojo.entity.RiskCount">
+        SELECT ri.risk_name as riskName, COUNT(*) as count
+        FROM tianji.report r
+                 JOIN tianji.risk ri ON r.risk_id = ri.risk_id
+        GROUP BY r.risk_id, ri.risk_name
+    </select>
+
+    <select id="getCountVulnId" resultType="org.wr.tianji.pojo.entity.VulnCount">
+        SELECT vi.vulnerability_type as vulnerabilityType, COUNT(*) as count
+        FROM tianji.report v
+                 JOIN tianji.vuln vi ON v.vuln_id = vi.vuln_id
+        GROUP BY v.vuln_id, vi.vulnerability_type
+    </select>
+
+
+</mapper>

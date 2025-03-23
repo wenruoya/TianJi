@@ -1,0 +1,68 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.wr.tianji.mapper.ReportMapper">
+
+    <select id="pageQuery" resultType="org.wr.tianji.pojo.entity.Report">
+        select * from tianji.report
+        <where>
+            <if test="reportName != null and reportName!=''">
+                WHERE report_name LIKE concat('%',#{reportName},'%')
+            </if>
+            <if test="riskId != null and riskId!=''">
+                AND  risk_id = #{riskId}
+            </if>
+            <if test="status != null and status!=''">
+                AND status = #{status}
+            </if>
+            <if test="period == 0">
+                AND report_period > NOW()
+            </if>
+            <if test="period == 1">
+                AND report_period BETWEEN DATE_SUB(NOW(), INTERVAL 24 HOUR) AND NOW()
+            </if>
+            <if test="period == 2">
+                AND report_period &lt; DATE_SUB(NOW(), INTERVAL 24 HOUR)
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="pageQueryByUserId" resultType="org.wr.tianji.pojo.entity.Report">
+        select * from tianji.report
+        <where>
+            <if test="reportName != null and reportName!=''">
+                WHERE report_name LIKE concat('%',#{reportName},'%')
+            </if>
+            <if test="riskId != null and riskId!=''">
+                AND  risk_id = #{riskId}
+            </if>
+            <if test="period == 0">
+                AND report_period > NOW()
+            </if>
+            <if test="period == 1">
+                AND report_period BETWEEN DATE_SUB(NOW(), INTERVAL 24 HOUR) AND NOW()
+            </if>
+            <if test="period == 2">
+                AND report_period &lt; DATE_SUB(NOW(), INTERVAL 24 HOUR)
+            </if>
+            <if test="userId != null and userId != ''">
+                AND (sec_user_id = #{userId} or dev_user_id = #{userId})
+            </if>
+            <if test="statusList != null and statusList.size() > 0">
+                AND status IN
+                <foreach collection="statusList" item="status" open="(" separator="," close=")">
+                    #{status}
+                </foreach>
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <update id="putUser">
+        UPDATE tianji.report
+        SET
+            sec_user_id = CASE WHEN #{tmp} = 2 THEN #{userId} ELSE sec_user_id END,
+            dev_user_id = CASE WHEN #{tmp} = 3 THEN #{userId} ELSE dev_user_id END
+        WHERE report_id = #{reportId};
+    </update>
+</mapper>
