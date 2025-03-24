@@ -24,9 +24,41 @@ soucre 下 /resources/tianji.sql
 /resources/application.properties 此处为默认管理员用户的账号密码，也是重置用户的密码
 ![image](https://github.com/user-attachments/assets/bd4db4f5-352e-4156-87a5-12bb0f838777)
 
-5. 配置nginx
+4. 配置nginx
+/var/www/dist 为前端打包文件的路径
 
+```
+server {
+                listen 8000;
+                server_name localhost;
+                location / {
+                        root   /var/www/dist;
+                        index  index.html index.htm;
+                        # 用于配合前端路由为h5模式使用，防止刷新404 https://router.vuejs.org/zh/guide/essentials/history-mode.html#nginx
+                        try_files $uri $uri/ /index.html;
+                        }
 
+                # 第一个代理后端地址（vite.config.ts里叫 /api，这里也要保持一致）
+                location /api {
+                # 如果后端在本地比如127.0.0.1或者localhost请解开下面的rewrite注释即可
+                rewrite  ^.+api/?(.*)$ /$1 break;
+                # 这里写后端地址（后面一定不要忘记添加 / ）
+                proxy_pass http://127.0.0.1:8080;
+                proxy_set_header Host $host;
+                proxy_set_header Cookie $http_cookie;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_redirect default;
+                add_header Access-Control-Allow-Origin *;
+                add_header Access-Control-Allow-Headers X-Requested-With;
+                add_header Access-Control-Allow-Methods GET,POST,OPTIONS;
+                        }
+
+        }
+```
+5. 启动
+启动nginx sudo nginx
+启动Java  java -jar xx.jar
 # 示例
 登录页面
 ![image](https://github.com/user-attachments/assets/b28d3b62-32cc-46b8-bb4c-cd6b4bb85e6f)
