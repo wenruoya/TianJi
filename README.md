@@ -67,4 +67,5 @@ server {
 定义风险
 ![image](https://github.com/user-attachments/assets/943296bf-b0a0-45d0-a272-652ef1ce7fb2)
 风险处置流
-![image](https://github.com/user-attachments/assets/cd2a5fd3-8e53-47fa-b7af-87479e762dd5)
+![image](https://github.com/user-attachments/assets/cac5e749-d2b3-4d87-8d0f-c91b731a552e)
+
