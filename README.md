@@ -22,7 +22,6 @@ soucre 下 /resources/tianji.sql
 修改文件mysql配置 /resources/application-pro.properties
 3. 定义默认密码
 /resources/application.properties 此处为默认管理员用户的账号密码，也是重置用户的密码
-![image](https://github.com/user-attachments/assets/bd4db4f5-352e-4156-87a5-12bb0f838777)
 
 4. 配置nginx
 /var/www/dist 为前端打包文件的路径
